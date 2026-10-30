@@ -9,6 +9,8 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/nav.js" defer></script>
+  <script src="js/quotes-data.js" defer></script>
+  <script src="js/quotes.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -43,6 +45,16 @@
         </h1>
 
         <p class="hero__desc">One line about you — what you are building, and what you care about.</p>
+
+        <figure class="hero__quote" id="heroQuote">
+          <blockquote class="hero__quote-text" id="heroQuoteText"></blockquote>
+          <figcaption class="hero__quote-meta">
+            <span id="heroQuoteAuthor"></span>
+            <button type="button" class="hero__quote-next" id="heroQuoteNext">
+              <span aria-hidden="true">↻</span> Another one
+            </button>
+          </figcaption>
+        </figure>
 
         <div class="hero__actions">
           <a class="btn btn--primary" href="#work">
