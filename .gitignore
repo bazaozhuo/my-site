@@ -1,0 +1,13 @@
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 临时测试文件（我们调试时生成的副本，不该进仓库）
+_*.html
+_*.png
+_*.json
+
+# 依赖（本项目零依赖，留着以防以后加）
+node_modules/
