@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1421">
+  <meta name="description" content="A small interactive game that runs in the browser.">
+  <title>Machine — Chuai Zhuoyang</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/nav.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <span id="top"></span>
+
+  <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- DRY nav: 内容和交互都在 js/nav.js 里，四个页面只留这一行 -->
+  <header class="nav" id="siteNav"></header>
+
+  <main id="main-content">
+    <section class="page" aria-labelledby="pageTitle">
+      <p class="page__eyebrow">03 / Experiments</p>
+      <h1 id="pageTitle">The Machine</h1>
+      <p class="page__lead">A little game, written from scratch: no engine, no library.</p>
+            <p class="todo">Content comes next — this page is wired up so the navigation and theme
+      already work on it. <span aria-hidden="true">✦</span></p>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer__inner">
+      <p class="footer__line">Still learning. Always building.</p>
+      <ul class="footer__links">
+        <li><a href="mailto:X20250028@stu.hibiuh.edu.cn">Email</a></li>
+        <li><a href="https://github.com/bazaozhuo" rel="noopener">GitHub</a></li>
+        <li><a href="#top">Back to top ↑</a></li>
+      </ul>
+      <p class="footer__meta">© <span id="year">2026</span> Chuai Zhuoyang · Made with curiosity <span aria-hidden="true">✳</span></p>
+    </div>
+  </footer>
+
+</body>
+</html>

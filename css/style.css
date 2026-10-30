@@ -571,3 +571,41 @@ html[data-theme="light"] .hero::before {
   .wave-hand.is-waving { animation: none; }
   * { transition: none !important; }
 }
+
+/* ===========================================================
+   Inner pages (Quotes / Projects / Machine)
+   =========================================================== */
+.page {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(7rem, 14vw, 10rem) 1.5rem clamp(4rem, 9vw, 7rem);
+}
+.page__eyebrow {
+  margin: 0 0 0.8rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+.page h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+.page__lead {
+  margin: 0 0 2.5rem;
+  max-width: 44rem;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: var(--ink-soft);
+}
+.todo {
+  max-width: 40rem;
+  padding: 1.1rem 1.3rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}

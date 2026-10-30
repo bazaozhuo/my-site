@@ -8,6 +8,7 @@
   <title>Chuai Zhuoyang — Building Things for the Web</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -19,35 +20,8 @@
   <a class="skip-link" href="#work">Skip to content</a>
 
   <!-- Floating pill navigation -->
-  <header class="nav">
-    <a class="nav__brand" href="#top">Chuai Zhuoyang</a>
-
-    <div class="nav__right">
-      <button type="button" class="theme-toggle" id="themeToggle"
-              aria-pressed="false" aria-label="Switch to light mode">
-        <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none">
-          <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.7"/>
-          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"
-                stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-        </svg>
-        <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none">
-          <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"
-                stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-        </svg>
-      </button>
-
-      <button type="button" class="nav__toggle" id="navToggle"
-              aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-
-    <nav class="nav__links" id="navMenu" aria-label="Main navigation">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+  <!-- DRY nav: 内容和交互都在 js/nav.js 里，四个页面只留这一行 -->
+  <header class="nav" id="siteNav"></header>
 
   <main id="main-content">
 

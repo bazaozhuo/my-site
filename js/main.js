@@ -296,49 +296,9 @@
   }
 
   /* =========================================================
-     4. Mobile menu, footer year, scroll-spy
+     4. Footer year
+     (mobile menu / scroll-spy moved to js/nav.js — the nav owns them)
      ========================================================= */
-  var toggle = document.getElementById('navToggle');
-  var menu = document.getElementById('navMenu');
-
-  function closeMenu() {
-    if (!menu || !toggle) return;
-    menu.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded', 'false');
-  }
-
-  if (toggle && menu) {
-    toggle.addEventListener('click', function () {
-      var open = menu.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-    menu.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') closeMenu();
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeMenu();
-    });
-  }
-
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
-
-  if ('IntersectionObserver' in window && menu) {
-    var links = menu.querySelectorAll('a');
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var target = '#' + entry.target.id;
-        Array.prototype.forEach.call(links, function (a) {
-          a.style.background = (a.getAttribute('href') === target)
-            ? 'var(--btn-ghost-hover)' : '';
-        });
-      });
-    }, { rootMargin: '-45% 0px -45% 0px' });
-
-    ['work', 'about', 'contact'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-  }
 })();
