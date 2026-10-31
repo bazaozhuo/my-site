@@ -1168,6 +1168,11 @@ html[data-theme="light"] .hero__quote {
   .proj-list--one { grid-template-columns: 1fr; }
 }
 
+/* 一组里只剩一张卡 → 横跨整行，右边不留空洞 */
+.proj:only-child { grid-column: 1 / -1; }
+/* 奇数个时最后一张也横跨整行（2 + 1 比 2 + 空好看） */
+.proj:last-child:nth-child(odd):not(:only-child) { grid-column: 1 / -1; }
+
 .proj {
   position: relative;
   display: flex;
