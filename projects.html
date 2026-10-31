@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0b1421">
-  <meta name="description" content="Two shipped projects and four planned ideas: astronomy, music, cryptography and a science-fiction terminal.">
+  <meta name="description" content="One finished project and four I want to build: astronomy, sampling Chinese music into English rap, a time capsule and a science-fiction terminal.">
   <title>Projects — Chuai Zhuoyang</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
@@ -25,76 +25,84 @@
     <section class="page" aria-labelledby="pageTitle">
       <p class="page__eyebrow">02 / Building</p>
       <h1 id="pageTitle">Projects</h1>
-      <p class="page__lead">One thing that exists, four I want to build next. Every idea below has a technical core — something you can actually be wrong about.</p>
+      <p class="page__lead">One thing I finished and four I want to build. I'm writing each one down as a promise with a technical core, so a year from now I can check whether I actually did it.</p>
 
-      <h2 class="proj-h">Shipped</h2>
-      <ul class="proj-list">
+      <h2 class="proj-h">Finished</h2>
+      <ul class="proj-list proj-list--one">
 
         <li class="proj">
-          <div class="proj__head">
+          <div class="proj__top">
+            <span class="proj__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v18H6.5A2.5 2.5 0 0 0 4 22Z"/><path d="M8 7h8M8 11h6"/></svg></span>
             <span class="proj__num">01</span>
-            <h3 class="proj__title">Deutsch-Lernzimmer</h3>
-            <span class="proj__state proj__state--live">Live</span>
+            <span class="proj__state proj__state--live">Live · shipped</span>
           </div>
+          <h3 class="proj__title">Deutsch-Lernzimmer</h3>
           <p class="proj__cat">Web · German · study tool</p>
-          <p class="proj__desc">An open study site for German learners between A2 and B1: 703 words, a searchable knowledge index, a word challenge and a custom 404 page. Bilingual, light and dark themes, no backend.</p>
-          <p class="proj__core"><b>Core</b> 703 words kept in eight data files, one per topic group. The vocabulary table, the challenge and the daily five all read from the same source, so adding a word is a one-file change.</p>
+          <p class="proj__desc">I built this for my own German course and then opened it up. It holds the 703 words I keep forgetting, the grammar points I got wrong, and a challenge that stops me from pretending I know them. Plain HTML, CSS and JavaScript — no backend, no framework.</p>
+          <p class="proj__core"><b>How it works</b>Every word lives in eight data files, one per topic group. The vocabulary table, the word challenge and the daily five all read from that same list, so when I add a word it appears in three places at once.</p>
           <p class="proj__meta"><a href="https://bazaozhuo.github.io/my-website/" target="_blank" rel="noopener noreferrer">bazaozhuo.github.io/my-website <span aria-hidden="true">↗</span></a></p>
         </li>
 
       </ul>
 
-      <h2 class="proj-h">Planned</h2>
+      <h2 class="proj-h">On my list</h2>
       <ul class="proj-list">
 
         <li class="proj">
-          <div class="proj__head">
+          <div class="proj__top">
+            <span class="proj__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4.6" transform="rotate(-25 12 12)"/><circle cx="20.2" cy="8.4" r="1.6" fill="currentColor" stroke="none"/></svg></span>
             <span class="proj__num">02</span>
-            <h3 class="proj__title">Orbit</h3>
             <span class="proj__state">Planned · 3–4 days</span>
           </div>
+          <h3 class="proj__title">Orbit</h3>
           <p class="proj__cat">Astronomy · canvas · maths</p>
-          <p class="proj__desc">Drag a time slider and see where the planets actually were on that date — “where was Mars the day I was born?”. The state lives in the URL, so any date is shareable.</p>
-          <p class="proj__core"><b>Core</b> Real ephemeris, not a decorative animation: Keplerian orbital elements plus a Newton iteration to solve Kepler's equation. The same page gives a different answer in ten years, because the sky does.</p>
+          <p class="proj__desc">I want to drag a timeline and see where the planets actually were on a given day — my birthday, or the night I couldn't sleep. I'd keep the date in the URL so I can send someone a specific sky and they see the same thing.</p>
+          <p class="proj__core"><b>How it works</b>I want real positions, not a decoration: Keplerian orbital elements plus a Newton iteration to solve Kepler's equation. The same page would give a different answer in ten years, because the sky does.</p>
+          
         </li>
 
         <li class="proj">
-          <div class="proj__head">
+          <div class="proj__top">
+            <span class="proj__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg></span>
             <span class="proj__num">03</span>
-            <h3 class="proj__title">Silk &amp; Bars</h3>
             <span class="proj__state">Planned · 4–5 days</span>
           </div>
-          <p class="proj__cat">Music · Chinese samples · English rap · Web Audio</p>
-          <p class="proj__desc">A browser sampler for putting traditional Chinese instruments under an English rap verse. Load a short phrase of guzheng, erhu, pipa or dizi, cut it onto a 16-step grid, layer a drum pattern, then record your own voice over the top and export the mix as one file.</p>
-          <p class="proj__core"><b>Core</b> A real audio clock, not <code>setInterval</code> alone: a lookahead scheduler reads <code>AudioContext.currentTime</code> and queues each slice a fraction of a second early, so the grid does not drift after two minutes. The finished mix is rendered through <code>OfflineAudioContext</code> and encoded to WAV in the page — no server, no library.</p>
-          <p class="proj__meta">Every sample gets a credit line; only self-recorded or public-domain recordings go in.</p>
+          <h3 class="proj__title">Silk &amp; Bars</h3>
+          <p class="proj__cat">Music · Chinese samples · English rap</p>
+          <p class="proj__desc">I want to put traditional Chinese instruments under an English rap verse. I'd record a short guzheng or erhu phrase myself, cut it across a 16-step grid, put a beat underneath, rap over it, and export the whole thing as one file.</p>
+          <p class="proj__core"><b>How it works</b>A real audio clock, not setInterval alone: a lookahead scheduler reads AudioContext.currentTime and queues each slice slightly early, so the grid still lines up after two minutes. The mix renders through OfflineAudioContext and encodes to WAV inside the page.</p>
+          <p class="proj__meta">Every sample gets a credit line — only my own recordings or public-domain material.</p>
         </li>
 
         <li class="proj">
-          <div class="proj__head">
+          <div class="proj__top">
+            <span class="proj__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15" r="1.6"/></svg></span>
             <span class="proj__num">04</span>
-            <h3 class="proj__title">Time Capsule</h3>
             <span class="proj__state">Planned · 2–3 days</span>
           </div>
+          <h3 class="proj__title">Time Capsule</h3>
           <p class="proj__cat">Future · cryptography · no backend</p>
-          <p class="proj__desc">Write a letter to your future self, lock it with a password and an unlock date. Before that date nobody can open it — not even the site, because the site never sees the key.</p>
-          <p class="proj__core"><b>Core</b> Real encryption in the browser: PBKDF2 derives a key from the passphrase, AES-GCM encrypts the letter, only the ciphertext is stored. Forget the passphrase and it is gone — that is the design, and the page says so.</p>
+          <p class="proj__desc">I want to write a letter to my future self and actually lock it. Password, unlock date, done. Before that date nobody can read it — not even the site, because the site never holds the key.</p>
+          <p class="proj__core"><b>How it works</b>PBKDF2 turns my passphrase into a key, AES-GCM encrypts the letter, and only the ciphertext is stored. If I forget the passphrase it is gone for good, and the page will say that out loud rather than pretend otherwise.</p>
+          
         </li>
 
         <li class="proj">
-          <div class="proj__head">
+          <div class="proj__top">
+            <span class="proj__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="16" rx="2.5"/><path d="M6.5 10.5 9 13l-2.5 2.5M12 16h5"/></svg></span>
             <span class="proj__num">05</span>
-            <h3 class="proj__title">Void Terminal</h3>
             <span class="proj__state">Planned · 3–4 days</span>
           </div>
+          <h3 class="proj__title">Void Terminal</h3>
           <p class="proj__cat">Science fiction · parser · narrative</p>
-          <p class="proj__desc">A retro terminal aboard a ship that stopped answering. You only have the keyboard: scan the deck, read the black box, decrypt what is left, open the right bay. The ending is a sentence you assemble.</p>
-          <p class="proj__core"><b>Core</b> A small command parser with a state machine — tokenise the line, resolve it against the current world state, print the result with a typing delay. Not a pile of if-statements; commands unlock as the story moves.</p>
+          <p class="proj__desc">I want to sit at the terminal of a ship that stopped answering. No mouse, no buttons — I type. I scan the decks, pull the black box, decrypt what is left of it, and open the right bay before the air runs out.</p>
+          <p class="proj__core"><b>How it works</b>A small command parser behind a state machine: split the line, resolve it against the current world state, print the answer with a typing delay. Commands unlock as the story moves, so it cannot be brute-forced.</p>
+          
         </li>
 
       </ul>
 
-      <p class="quote-note">Five entries: one shipped, four planned. Status is honest — the planned ones are not pretending to be finished.</p>
+      <p class="quote-note">Five entries: one built, four still on paper. I'll write the full brief for each one as I start it.</p>
     </section>
   </main>
 
