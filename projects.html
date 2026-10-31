@@ -73,12 +73,13 @@
         <li class="proj">
           <div class="proj__head">
             <span class="proj__num">04</span>
-            <h3 class="proj__title">Interval Arcade</h3>
-            <span class="proj__state">Planned · 2–3 days</span>
+            <h3 class="proj__title">Silk &amp; Bars</h3>
+            <span class="proj__state">Planned · 4–5 days</span>
           </div>
-          <p class="proj__cat">Music · Web Audio · game</p>
-          <p class="proj__desc">Hear two notes, name the interval, build a streak. Ten in a row and the level goes up. Playable with the number keys, so the whole game is two hands and no mouse.</p>
-          <p class="proj__core"><b>Core</b> Every sound is synthesised live with an oscillator and an ADSR envelope — not one audio file in the project. An interval is a frequency ratio, so the difficulty is arithmetic, not taste.</p>
+          <p class="proj__cat">Music · Chinese samples · English rap · Web Audio</p>
+          <p class="proj__desc">A browser sampler for putting traditional Chinese instruments under an English rap verse. Load a short phrase of guzheng, erhu, pipa or dizi, cut it onto a 16-step grid, layer a drum pattern, then record your own voice over the top and export the mix as one file.</p>
+          <p class="proj__core"><b>Core</b> A real audio clock, not <code>setInterval</code> alone: a lookahead scheduler reads <code>AudioContext.currentTime</code> and queues each slice a fraction of a second early, so the grid does not drift after two minutes. The finished mix is rendered through <code>OfflineAudioContext</code> and encoded to WAV in the page — no server, no library.</p>
+          <p class="proj__meta">Every sample gets a credit line; only self-recorded or public-domain recordings go in.</p>
         </li>
 
         <li class="proj">
