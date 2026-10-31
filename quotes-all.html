@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1421">
+  <meta name="description" content="All fifteen quotes in the collection, searchable by theme.">
+  <title>All quotes — Chuai Zhuoyang</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/nav.js" defer></script>
+  <script src="js/quotes-data.js" defer></script>
+  <script src="js/quotes.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <span id="top"></span>
+
+  <header class="nav" id="siteNav"></header>
+
+  <main id="main-content">
+    <section class="page" aria-labelledby="pageTitle">
+      <p class="page__eyebrow">02 / All words</p>
+      <h1 id="pageTitle">The whole wall</h1>
+      <p class="page__lead">All fifteen, no rotation. Filter by what you need today.</p>
+
+      <div class="quote-filters" id="quoteFilters" role="group" aria-label="Filter quotes by theme"></div>
+      <p class="quote-count" id="quoteCount"></p>
+
+      <ul class="quote-grid" id="quotesList"></ul>
+
+      <p class="quote-status" id="quoteStatus" role="status" aria-live="polite"></p>
+
+      <p class="author-nav">
+        <a class="btn btn--ghost" href="quotes-banner.html"><span aria-hidden="true">←</span> Back to the banner</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <p class="footer__line">Still learning. Still reading.</p>
+      <div class="footer__links">
+        <a href="mailto:X20250028@stu.hibiuh.edu.cn">Email</a>
+        <a href="https://github.com/bazaozhuo" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="#top">Back to top ↑</a>
+      </div>
+      <p class="footer__meta">© <span id="year">2026</span> Chuai Zhuoyang · made with curiosity ✳</p>
+    </div>
+  </footer>
+</body>
+</html>
