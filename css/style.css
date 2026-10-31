@@ -1167,6 +1167,11 @@ html[data-theme="light"] .hero__quote {
   .proj-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
+/* 一组里只剩一张卡时，让它横跨整行，不要在右边留一大块空白 */
+.proj:only-child { grid-column: 1 / -1; }
+.proj:only-child .proj__desc,
+.proj:only-child .proj__core { max-width: 60rem; }
+
 .proj {
   position: relative;
   padding: 1.5rem 1.6rem 1.35rem;
