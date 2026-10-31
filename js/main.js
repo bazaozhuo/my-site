@@ -151,13 +151,24 @@
       r.trail.push({ x: r.x, y: r.y });
       if (r.trail.length > 14) r.trail.shift();
 
-      ctx.beginPath();
+      /* 彗星式尾迹：越靠后越细越淡，头部一颗亮点。
+         之前是一条等粗细的直线，远看像根竖杠。 */
       ctx.strokeStyle = r.hue;
-      ctx.lineWidth = 2.4;
       if (!isLightTheme()) { ctx.shadowColor = r.hue; ctx.shadowBlur = 10; }
-      ctx.moveTo(r.trail[0].x, r.trail[0].y);
-      for (var t = 1; t < r.trail.length; t++) ctx.lineTo(r.trail[t].x, r.trail[t].y);
-      ctx.stroke();
+      for (var t = 0; t < r.trail.length - 1; t++) {
+        var k = (t + 1) / r.trail.length;          /* 0 尾部 → 1 头部 */
+        ctx.globalAlpha = 0.12 + k * 0.75;
+        ctx.lineWidth = 0.8 + k * 2.2;
+        ctx.beginPath();
+        ctx.moveTo(r.trail[t].x, r.trail[t].y);
+        ctx.lineTo(r.trail[t + 1].x, r.trail[t + 1].y);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.beginPath();
+      ctx.fillStyle = '#ffffff';
+      ctx.arc(r.x, r.y, 2.2, 0, Math.PI * 2);
+      ctx.fill();
 
       if (r.y <= r.targetY || r.vy >= 0) {
         burst(r.x, r.y, r.hue);

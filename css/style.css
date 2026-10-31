@@ -672,7 +672,8 @@ html[data-theme="light"] .hero__quote {
 }
 
 /* 每次换句子轻微淡入（减少动效时不加这个 class） */
-.hero__quote.is-fresh { animation: quoteIn 0.6s ease-out; }
+.hero__quote.is-fresh,
+.js-quote-banner.is-fresh { animation: quoteIn 0.6s ease-out; }
 @keyframes quoteIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: none; }
@@ -696,7 +697,7 @@ html[data-theme="light"] .hero__quote {
   padding: 0.34rem 0.85rem;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: transparent;
+  background: var(--paper);      /* 不透明：否则烟花会从镂空的小圆片里透出来 */
   color: var(--ink-soft);
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -816,4 +817,88 @@ html[data-theme="light"] .hero__quote {
   font-size: 0.78rem;
   color: var(--ink-soft);
   opacity: 0.8;
+}
+
+/* ===========================================================
+   Quotes page: featured banner
+   -----------------------------------------------------------
+   页面顶部的"当期精选"横幅。和首页那条共用 js/quotes.js 的
+   轮播逻辑，只是尺寸和外框更重一点。
+   =========================================================== */
+.q-banner {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 2rem;
+  padding: 1.7rem 1.9rem 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(194, 96, 58, 0.12), rgba(194, 96, 58, 0.02) 60%),
+    var(--card);
+}
+
+/* 右上角放一个很大的淡引号做装饰 */
+.q-banner::after {
+  content: "”";
+  position: absolute;
+  right: 1.4rem;
+  top: -1.6rem;
+  font-family: Georgia, "Songti SC", serif;
+  font-size: 9rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.q-banner__label {
+  margin: 0 0 0.9rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.q-banner__text {
+  margin: 0 0 1rem;
+  max-width: 52rem;
+  font-family: Georgia, "Songti SC", "Times New Roman", serif;
+  font-size: clamp(1.25rem, 2.7vw, 1.85rem);
+  line-height: 1.4;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+
+.q-banner__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  font-size: 0.84rem;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+
+.q-banner__next {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.28rem 0.85rem;
+  font: inherit;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.q-banner__next:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(194, 96, 58, 0.06);
+}
+
+@media (max-width: 520px) {
+  .q-banner { padding: 1.25rem 1.15rem 1.15rem; }
+  .q-banner::after { font-size: 6.5rem; top: -1rem; right: 0.8rem; }
 }

@@ -28,7 +28,18 @@
       <p class="page__eyebrow">01 / Words</p>
       <h1 id="pageTitle">Quotes</h1>
       <p class="page__lead">A few lines worth keeping. Fifteen of them, at least.</p>
-            <div class="quote-filters" id="quoteFilters" role="group" aria-label="Filter quotes by theme"></div>
+            <section class="q-banner js-quote-banner" id="quoteBanner" aria-label="Featured quote">
+        <p class="q-banner__label">Featured line <span aria-hidden="true">✦</span> a new one every few seconds</p>
+        <blockquote class="q-banner__text" data-role="text"></blockquote>
+        <p class="q-banner__meta">
+          <span data-role="author"></span>
+          <button type="button" class="q-banner__next" data-role="next" aria-label="Show another quote">
+            <span aria-hidden="true">↻</span> Another one
+          </button>
+        </p>
+      </section>
+
+      <div class="quote-filters" id="quoteFilters" role="group" aria-label="Filter quotes by theme"></div>
       <p class="quote-count" id="quoteCount"></p>
       <ul class="quote-grid" id="quotesList"></ul>
       <p class="quote-status" id="quoteStatus" role="status" aria-live="polite"></p>

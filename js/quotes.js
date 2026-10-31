@@ -52,66 +52,68 @@
   }
 
   /* =========================================================
-     1. Hero banner: a random quote that rotates on its own
+     1. Quote banners — the home hero and the quotes page
+     ---------------------------------------------------------
+     Any element with class .js-quote-banner becomes a rotating
+     banner. It looks for three children by data-role:
+       text | author | next
+     so the same code drives both pages without duplication.
      ========================================================= */
-  var banner = document.getElementById('heroQuote');
-  var bannerText = document.getElementById('heroQuoteText');
-  var bannerAuthor = document.getElementById('heroQuoteAuthor');
-  var bannerNext = document.getElementById('heroQuoteNext');
   var ROTATE_MS = 9000;
-  var lastIndex = -1;
-  var rotateTimer = null;
 
-  function drawBanner() {
-    var i = Math.floor(Math.random() * QUOTES.length);
-    if (QUOTES.length > 1 && i === lastIndex) i = (i + 1) % QUOTES.length;
-    lastIndex = i;
+  function setupBanner(banner) {
+    var textEl = banner.querySelector('[data-role="text"]');
+    var authorEl = banner.querySelector('[data-role="author"]');
+    var nextBtn = banner.querySelector('[data-role="next"]');
+    if (!textEl) return;
 
-    var q = QUOTES[i];
-    bannerText.textContent = quoteText(q);
-    bannerAuthor.textContent = '— ' + q.author + ' · ' + q.tag;
-    banner.setAttribute('data-tag', q.tag);
+    var lastIndex = -1;
+    var timer = null;
 
-    /* retrigger the fade-in without a library */
-    if (!reduceMotion) {
-      banner.classList.remove('is-fresh');
-      void banner.offsetWidth;
-      banner.classList.add('is-fresh');
+    function draw() {
+      var i = Math.floor(Math.random() * QUOTES.length);
+      if (QUOTES.length > 1 && i === lastIndex) i = (i + 1) % QUOTES.length;
+      lastIndex = i;
+
+      var q = QUOTES[i];
+      textEl.textContent = quoteText(q);
+      if (authorEl) authorEl.textContent = '— ' + q.author + ' · ' + q.tag;
+      banner.setAttribute('data-tag', q.tag);
+
+      if (!reduceMotion) {
+        banner.classList.remove('is-fresh');
+        void banner.offsetWidth;
+        banner.classList.add('is-fresh');
+      }
     }
-  }
 
-  function startRotate() {
-    if (reduceMotion || !banner) return;
-    stopRotate();
-    rotateTimer = setInterval(drawBanner, ROTATE_MS);
-  }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() {
+      if (reduceMotion) return;
+      stop();
+      timer = setInterval(draw, ROTATE_MS);
+    }
 
-  function stopRotate() {
-    if (rotateTimer) { clearInterval(rotateTimer); rotateTimer = null; }
-  }
+    draw();
+    start();
 
-  if (banner && bannerText) {
-    drawBanner();
-    startRotate();
-
-    /* pause while the visitor is reading it */
-    banner.addEventListener('mouseenter', stopRotate);
-    banner.addEventListener('mouseleave', startRotate);
-    banner.addEventListener('focusin', stopRotate);
-    banner.addEventListener('focusout', startRotate);
-
-    /* and while the tab is in the background */
+    banner.addEventListener('mouseenter', stop);
+    banner.addEventListener('mouseleave', start);
+    banner.addEventListener('focusin', stop);
+    banner.addEventListener('focusout', start);
     document.addEventListener('visibilitychange', function () {
-      document.hidden ? stopRotate() : startRotate();
+      document.hidden ? stop() : start();
     });
 
-    if (bannerNext) {
-      bannerNext.addEventListener('click', function () {
-        drawBanner();
-        startRotate();                 /* restart the countdown after a manual draw */
-      });
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () { draw(); start(); });
     }
   }
+
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.js-quote-banner'),
+    setupBanner
+  );
 
   /* =========================================================
      2. The wall of quotes + tag filter
