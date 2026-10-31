@@ -135,7 +135,14 @@ a { color: inherit; }
   pointer-events: none;
 }
 
-header, main, footer { position: relative; z-index: 1; }
+/* 注意：main 不能设 z-index —— 一旦设了就会建立层叠上下文，
+   里面所有内容都被锁在 canvas 下面，烟花就永远盖在卡片上。
+   这里只给 position，让里面的 .work / .page 能自己抬层级。 */
+header { position: relative; z-index: 50; }
+main, footer { position: relative; }
+
+/* 卡片和正文压到烟花之上；hero 不抬层级，所以首屏仍能看到烟花 */
+.work, .about, .page, .footer { position: relative; z-index: 3; }
 
 /* ===========================================================
    Navigation
@@ -611,40 +618,49 @@ html[data-theme="light"] .hero::before {
 }
 
 /* ===========================================================
-   Hero quote (home page)
+   Hero banner: rotating quote
    =========================================================== */
 .hero__quote {
   margin: 0 0 2rem;
-  max-width: 38rem;
-  padding-left: 1rem;
-  border-left: 2px solid var(--hero-name);
-  transition: opacity 0.3s, background 0.4s;
+  max-width: 46rem;
+  padding: 1rem 1.2rem 1rem 1.3rem;
+  border-left: 3px solid var(--hero-name);
+  border-radius: 0 12px 12px 0;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.3s, border-color 0.3s;
 }
+html[data-theme="light"] .hero__quote {
+  background: rgba(255, 255, 255, 0.55);
+  border-left-color: var(--accent);
+}
+
 .hero__quote-text {
   margin: 0;
-  font-size: clamp(0.98rem, 1.5vw, 1.12rem);
+  font-family: Georgia, "Songti SC", "Times New Roman", serif;
+  font-size: clamp(1.02rem, 1.8vw, 1.24rem);
   line-height: 1.55;
   color: var(--hero-text);
-  opacity: 0.92;
-  font-style: italic;
+  text-wrap: pretty;
 }
+
 .hero__quote-meta {
-  margin: 0.5rem 0 0;
+  margin: 0.6rem 0 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.9rem;
-  font-size: 0.82rem;
-  letter-spacing: 0.04em;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
   color: var(--hero-sub);
 }
+
 .hero__quote-next {
   background: transparent;
   border: 1px solid var(--btn-ghost-border);
   border-radius: 999px;
   padding: 0.22rem 0.7rem;
   font: inherit;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   color: var(--hero-sub);
   cursor: pointer;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
@@ -654,15 +670,44 @@ html[data-theme="light"] .hero::before {
   color: var(--hero-text);
   border-color: var(--hero-text);
 }
-.hero__quote.is-flash { animation: quoteFlash 0.7s ease-out; }
-@keyframes quoteFlash {
-  0%   { opacity: 0.25; transform: translateX(-4px); }
-  100% { opacity: 1;    transform: none; }
+
+/* 每次换句子轻微淡入（减少动效时不加这个 class） */
+.hero__quote.is-fresh { animation: quoteIn 0.6s ease-out; }
+@keyframes quoteIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
 }
 
 /* ===========================================================
    Quotes page
    =========================================================== */
+.quote-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1.5rem;
+}
+
+.qfilter {
+  font: inherit;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.34rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.qfilter:hover { color: var(--ink); border-color: var(--ink-soft); }
+.qfilter[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
 .quote-count {
   margin: 0 0 1.6rem;
   font-size: 0.72rem;
@@ -671,31 +716,33 @@ html[data-theme="light"] .hero::before {
   color: var(--ink-soft);
 }
 
+/* 杂志式排版：等高竖栏，卡片按内容高度自然错落 */
 .quote-grid {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: grid;
-  gap: 1.1rem;
-  grid-template-columns: 1fr;
+  columns: 1;
+  column-gap: 1.1rem;
 }
-@media (min-width: 720px)  { .quote-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1100px) { .quote-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 700px)  { .quote-grid { columns: 2; } }
+@media (min-width: 1080px) { .quote-grid { columns: 3; } }
 
 .quote-card {
-  margin: 0;
   break-inside: avoid;
+  margin: 0 0 1.1rem;
+  display: inline-block;      /* columns 布局下需要它按整块排 */
+  width: 100%;
 }
+
 .quote-card figure {
   display: flex;
   flex-direction: column;
-  height: 100%;
   margin: 0;
-  padding: 1.35rem 1.4rem 1.15rem;
+  padding: 1.5rem 1.5rem 1.2rem;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  transition: border-color 0.2s, box-shadow 0.25s, transform 0.2s, background 0.3s;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s, background 0.3s;
 }
 .quote-card figure:hover {
   border-color: var(--accent);
@@ -704,35 +751,37 @@ html[data-theme="light"] .hero::before {
 }
 
 .quote-card__tag {
-  margin: 0 0 0.9rem;
-  font-size: 0.64rem;
-  letter-spacing: 0.2em;
+  margin: 0 0 0.85rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--accent);
   font-weight: 700;
 }
 
 .quote-card__text {
-  margin: 0 0 0.9rem;
-  font-size: 1.02rem;
-  line-height: 1.55;
+  margin: 0 0 1rem;
+  font-family: Georgia, "Songti SC", "Times New Roman", serif;
+  font-size: 1.16rem;
+  line-height: 1.5;
   color: var(--ink);
   text-wrap: pretty;
 }
 
 .quote-card__author {
-  margin: 0 0 0.9rem;
-  font-size: 0.86rem;
+  margin: 0 0 1rem;
+  font-size: 0.84rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
   color: var(--ink-soft);
 }
 
 .quote-card__zh {
-  margin: 0 auto 1.1rem;
-  padding-top: 0.85rem;
+  margin: 0 auto 1.15rem;
+  padding-top: 0.9rem;
   border-top: 1px solid var(--line);
   font-size: 0.9rem;
-  line-height: 1.7;
+  line-height: 1.75;
   color: var(--ink-soft);
 }
 
@@ -744,7 +793,8 @@ html[data-theme="light"] .hero::before {
   border-radius: 999px;
   padding: 0.28rem 0.8rem;
   font: inherit;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
   color: var(--ink-soft);
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s, background 0.2s;
@@ -758,9 +808,12 @@ html[data-theme="light"] .hero::before {
   font-size: 0.84rem;
   color: var(--accent);
 }
+
 .quote-note {
-  margin: 1.6rem 0 0;
+  margin: 1.8rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
   font-size: 0.78rem;
   color: var(--ink-soft);
-  opacity: 0.75;
+  opacity: 0.8;
 }
