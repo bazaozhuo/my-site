@@ -23,6 +23,25 @@
   var BRAND = 'Chuai Zhuoyang';
   var BRAND_HREF = 'index.html';
 
+  var EMAIL = 'X20250028@stu.hibiuh.edu.cn';
+  var GITHUB = 'https://github.com/bazaozhuo';
+
+  var ICON_MAIL =
+    '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"' +
+    ' stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="m3.6 6.8 8.4 6.1 8.4-6.1"/>' +
+    '</svg>';
+
+  var ICON_GITHUB =
+    '<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">' +
+      '<path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34' +
+      '-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03' +
+      '.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.98 1.03-2.68' +
+      '-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02' +
+      '.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.85-2.35 4.7-4.58 4.94.36.31.68.92.68 1.85v2.74' +
+      'c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>' +
+    '</svg>';
+
   var NAV_ITEMS = [
     { href: 'index.html',    label: 'Home' },
     { href: 'quotes.html',   label: 'Quotes' },
@@ -52,6 +71,12 @@
     '<a class="nav__brand" href="' + BRAND_HREF + '">' + BRAND + '</a>' +
 
     '<div class="nav__right">' +
+      /* 邮箱 + GitHub：就放在深浅色按钮旁边 */
+      '<a class="nav__icon" href="mailto:' + EMAIL + '" aria-label="Email me" title="Email me">' +
+        ICON_MAIL + '</a>' +
+      '<a class="nav__icon" href="' + GITHUB + '" target="_blank" rel="noopener noreferrer"' +
+        ' aria-label="GitHub profile (opens in a new tab)" title="GitHub">' +
+        ICON_GITHUB + '</a>' +
       '<button type="button" class="theme-toggle" id="themeToggle"' +
       ' aria-pressed="false" aria-label="Switch to light mode">' +
         '<svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true" width="18" height="18" fill="none">' +
@@ -70,7 +95,12 @@
       '</button>' +
     '</div>' +
 
-    '<nav class="nav__links" id="navMenu" aria-label="Main navigation">' + links + '</nav>';
+    '<nav class="nav__links" id="navMenu" aria-label="Main navigation">' + links +
+      '<span class="nav__links-sep" aria-hidden="true"></span>' +
+      '<a class="nav__links-contact" href="mailto:' + EMAIL + '">Email</a>' +
+      '<a class="nav__links-contact" href="' + GITHUB + '" target="_blank" rel="noopener noreferrer">' +
+        'GitHub <span aria-hidden="true">↗</span></a>' +
+    '</nav>';
 
   /* ---------- mobile drawer ---------- */
   var toggle = document.getElementById('navToggle');
