@@ -46,7 +46,7 @@
     { href: 'index.html',    label: 'Home' },
     { href: 'quotes.html',   label: 'Quotes' },
     { href: 'projects.html', label: 'Projects' },
-    { href: 'machine.html',  label: 'Machine' }
+    { href: 'machine.html',  label: 'Useless Machine' }
   ];
 
   /* ---------- which file is open right now? ---------- */
