@@ -1435,3 +1435,97 @@ html[data-theme="light"] .proj code { background: rgba(0, 0, 0, 0.06); }
   .nav__links.is-open .nav__links-sep { display: block; }
   .nav__links.is-open .nav__links-contact { display: block; }
 }
+
+/* ===========================================================
+   Useless machine — night lake scene
+   =========================================================== */
+.um-body { background: #050c0f; }
+
+.um {
+  position: relative;
+  z-index: 3;                 /* 盖住背景烟花层 */
+  height: 100svh;
+  min-height: 32rem;
+  margin: 0;
+  padding: 0;
+}
+
+.um__stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  outline: none;
+}
+.um__stage:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(226, 86, 94, 0.6);
+}
+
+.um__scene {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* caption + meter */
+.um__caption {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2rem;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(233, 227, 209, 0.62);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.um__caption span {
+  color: rgba(233, 227, 209, 0.92);
+  border-bottom: 1px solid rgba(233, 227, 209, 0.3);
+  padding-bottom: 2px;
+}
+.um__caption.is-gone {
+  opacity: 0;
+  transform: translate(-50%, 8px);
+}
+
+.um__meter {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.5rem;
+  margin: 0;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(233, 227, 209, 0.45);
+  font-variant-numeric: tabular-nums;
+}
+.um__meter span { color: rgba(233, 227, 209, 0.8); }
+
+.um__sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .um__caption { bottom: 2.4rem; font-size: 0.7rem; letter-spacing: 0.1em; }
+  .um__meter { right: 1rem; bottom: 1rem; font-size: 0.66rem; }
+}
+
+/* 只在屏幕阅读器里出现的标题 */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

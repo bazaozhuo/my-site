@@ -3,45 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1421">
-  <meta name="description" content="A small interactive game that runs in the browser.">
-  <title>Machine — Chuai Zhuoyang</title>
+  <meta name="theme-color" content="#08100f">
+  <meta name="description" content="A useless machine: a figure in a rowboat on a night lake. Click the water to row.">
+  <title>The Machine — Chuai Zhuoyang</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/machine.js" defer></script>
 </head>
-<body>
-
-  <span id="top"></span>
-
+<body class="um-body">
   <canvas id="fx" class="fx" aria-hidden="true"></canvas>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <span id="top"></span>
 
-  <!-- DRY nav: 内容和交互都在 js/nav.js 里，四个页面只留这一行 -->
   <header class="nav" id="siteNav"></header>
 
   <main id="main-content">
-    <section class="page" aria-labelledby="pageTitle">
-      <p class="page__eyebrow">03 / Experiments</p>
-      <h1 id="pageTitle">The Machine</h1>
-      <p class="page__lead">A little game, written from scratch: no engine, no library.</p>
-            <p class="todo">Content comes next — this page is wired up so the navigation and theme
-      already work on it. <span aria-hidden="true">✦</span></p>
+    <section class="um" aria-labelledby="pageTitle">
+      <h1 id="pageTitle" class="visually-hidden">The Machine</h1>
+
+      <div class="um__stage" id="umStage" tabindex="0"
+           aria-label="Night lake. A figure sits in a rowboat. Click the water, or use the arrow keys, to row.">
+
+        <svg class="um__scene" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#07100f"/>
+              <stop offset="100%" stop-color="#123039"/>
+            </linearGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#0e2027"/>
+              <stop offset="100%" stop-color="#050c0f"/>
+            </linearGradient>
+            <filter id="blur8" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="10"/>
+            </filter>
+            <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e9e3d1" stop-opacity="0.16"/>
+              <stop offset="100%" stop-color="#e9e3d1" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- sky -->
+          <rect width="1200" height="700" fill="url(#sky)"/>
+
+          <!-- moon: one circle, one halo -->
+          <circle cx="880" cy="140" r="86" fill="#e9e3d1" opacity="0.06"/>
+          <circle cx="880" cy="140" r="40" fill="#e9e3d1" opacity="0.9"/>
+
+          <!-- treeline: two flat silhouettes -->
+          <path class="um-trees-far" fill="#0e2226" opacity="0.95"
+                d="M0 330 L120 292 L240 322 L360 288 L480 326 L600 290 L720 324 L840 288 L960 322 L1080 292 L1200 326 L1200 360 L0 360 Z"/>
+          <path class="um-trees-near" fill="#06100f"
+                d="M0 352 L140 322 L280 350 L420 320 L560 352 L700 322 L840 350 L980 320 L1120 352 L1200 330 L1200 372 L0 372 Z"/>
+
+          <!-- water -->
+          <rect y="350" width="1200" height="350" fill="url(#water)"/>
+          <g class="um-reflect">
+            <ellipse cx="880" cy="470" rx="46" ry="150" fill="url(#glow)" filter="url(#blur8)" opacity="0.9"/>
+            <g stroke="#e9e3d1" stroke-linecap="round" opacity="0.16">
+              <path d="M846 396 h68" stroke-width="2"/>
+              <path d="M856 424 h48" stroke-width="1.6"/>
+              <path d="M840 452 h76" stroke-width="1.6"/>
+            </g>
+          </g>
+          <rect y="350" width="1200" height="2" fill="#1b3d46" opacity="0.8"/>
+
+          <g id="umRipples"></g>
+
+          <!-- three still lines on the water -->
+          <g stroke="#8fb6ba" stroke-linecap="round" opacity="0.08">
+            <path d="M120 420 h180" stroke-width="2"/>
+            <path d="M700 470 h240" stroke-width="2"/>
+            <path d="M300 540 h160" stroke-width="2"/>
+          </g>
+
+          <!-- boat + figure: simple shapes only -->
+          <g class="um-boat" id="umBoat" transform="translate(430 468)">
+            <ellipse cx="0" cy="30" rx="74" ry="6" fill="#000" opacity="0.28"/>
+
+            <g class="um-oar um-oar--l">
+              <line x1="-44" y1="-2" x2="-112" y2="38" stroke="#43301f" stroke-width="4" stroke-linecap="round"/>
+            </g>
+            <g class="um-oar um-oar--r">
+              <line x1="44" y1="-2" x2="112" y2="38" stroke="#43301f" stroke-width="4" stroke-linecap="round"/>
+            </g>
+
+            <!-- hull: one crescent -->
+            <path d="M-72 0 C -50 26 -24 32 0 32 C 24 32 50 26 72 0 Z" fill="#2a1c12"/>
+            <path d="M-72 0 C -50 26 -24 32 0 32 C 24 32 50 26 72 0" fill="none" stroke="#5c4029" stroke-width="2"/>
+            <path d="M-66 -1 C -48 20 -26 27 0 27 C 26 27 48 20 66 -1" fill="none" stroke="#7a5735" stroke-width="1.2" opacity="0.5"/>
+
+            <!-- figure: body, head, hat -->
+            <path d="M-15 0 C -17 -34 -8 -44 2 -44 C 12 -44 19 -34 17 0 Z" fill="#14171b"/>
+            <circle cx="2" cy="-54" r="11" fill="#c8b8a1"/>
+            <path d="M-16 -58 H 20" stroke="#0f1216" stroke-width="4" stroke-linecap="round"/>
+            <path d="M-10 -58 C -10 -66 14 -66 14 -58 Z" fill="#0f1216"/>
+          </g>
+        </svg>
+
+        <p class="um__caption" id="umCaption"><span>Click the water</span> to row</p>
+        <p class="um__meter"><span id="umDist">0</span> m</p>
+        <p class="um__sr" id="umStatus" role="status" aria-live="polite"></p>
+      </div>
     </section>
   </main>
-
-  <footer class="footer" id="contact">
-    <div class="footer__inner">
-      <p class="footer__line">Still learning. Always building.</p>
-      <ul class="footer__links">
-        <li><a href="mailto:X20250028@stu.hibiuh.edu.cn">Email</a></li>
-        <li><a href="https://github.com/bazaozhuo" rel="noopener">GitHub</a></li>
-        <li><a href="#top">Back to top ↑</a></li>
-      </ul>
-      <p class="footer__meta">© <span id="year">2026</span> Chuai Zhuoyang · Made with curiosity <span aria-hidden="true">✳</span></p>
-    </div>
-  </footer>
-
 </body>
 </html>
