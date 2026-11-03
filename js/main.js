@@ -64,7 +64,9 @@
      Canvas is pointer-events:none and sits behind the content,
      so links and buttons keep working normally.
      ========================================================= */
-  var canvas = document.getElementById('fx');
+  /* Screenshots want a clean frame: <html data-no-fx> turns the fireworks off. */
+  var NO_FX = document.documentElement.hasAttribute('data-no-fx');
+  var canvas = NO_FX ? null : document.getElementById('fx');
   var tip = document.getElementById('fxTip');
   var ctx = canvas ? canvas.getContext('2d') : null;
   var W = 0, H = 0, dpr = 1;

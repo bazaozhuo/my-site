@@ -7,6 +7,20 @@
   <meta name="description" content="One quote at a time, shown full screen. Click the author to read everything they said.">
   <title>Words worth remembering — Chuai Zhuoyang</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- 先定主题再渲染：避免深色用户看到一瞬间白屏，也让浅色截图不会拍到过渡中的颜色 -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (t === null && !window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="css/style.css">
   <script src="js/nav.js" defer></script>
   <script src="js/quotes-data.js" defer></script>

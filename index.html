@@ -7,6 +7,20 @@
   <meta name="description" content="A personal corner of the internet — projects, experiments, and things made for fun.">
   <title>Chuai Zhuoyang — Building Things for the Web</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <!-- 先定主题再渲染：避免深色用户看到一瞬间白屏，也让浅色截图不会拍到过渡中的颜色 -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'dark' || (t === null && !window.matchMedia('(prefers-color-scheme: light)').matches)) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="css/style.css">
   <script src="js/nav.js" defer></script>
   <script src="js/quotes-data.js" defer></script>
@@ -44,7 +58,7 @@
           <span class="hero__name" aria-hidden="true"><span id="typedName"></span><span class="caret" id="caret"></span></span>
         </h1>
 
-        <p class="hero__desc">One line about you — what you are building, and what you care about.</p>
+        <p class="hero__desc">I'm a computer science student in Hainan. I build small, careful things for the web — and I keep the notes when they break.</p>
 
         <figure class="hero__quote js-quote-banner" id="heroQuote">
           <blockquote class="hero__quote-text" id="heroQuoteText" data-role="text"></blockquote>
