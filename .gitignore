@@ -15,3 +15,6 @@ node_modules/
 # 测试工具，不进仓库
 _axe.min.js
 _axe.html
+
+# WPS/Word 打开文档时产生的临时锁文件
+~$*
