@@ -1516,6 +1516,8 @@ html[data-theme="light"] .proj code { background: rgba(0, 0, 0, 0.06); }
 @media (max-width: 640px) {
   .um__caption { bottom: 2.4rem; font-size: 0.7rem; letter-spacing: 0.1em; }
   .um__meter { right: 1rem; bottom: 1rem; font-size: 0.66rem; }
+  /* 手机上把声音按钮放大到 44px，手指好点 */
+  .um__sound { width: 2.75rem; height: 2.75rem; left: 0.9rem; bottom: 0.9rem; }
 }
 
 /* 只在屏幕阅读器里出现的标题 */
@@ -1528,4 +1530,53 @@ html[data-theme="light"] .proj code { background: rgba(0, 0, 0, 0.06); }
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---------- lantern flicker + drifting fog ---------- */
+.um-lamp { animation: umFlicker 4.2s ease-in-out infinite; transform-origin: 52px -16px; }
+@keyframes umFlicker {
+  0%, 100% { opacity: 1; }
+  38%      { opacity: 0.84; }
+  62%      { opacity: 0.95; }
+  78%      { opacity: 0.88; }
+}
+
+.um-fog ellipse { transform-box: fill-box; }
+.um-fog__a { animation: umDrift 54s ease-in-out infinite alternate; }
+.um-fog__b { animation: umDrift 71s ease-in-out infinite alternate-reverse; }
+.um-fog__c { animation: umDrift 88s ease-in-out infinite alternate; }
+@keyframes umDrift {
+  from { transform: translateX(-70px); }
+  to   { transform: translateX(70px); }
+}
+
+/* sound toggle: same size as the meter, quiet until you need it */
+.um__sound {
+  position: absolute;
+  left: 1.2rem;
+  bottom: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 227, 209, 0.22);
+  background: rgba(6, 16, 19, 0.55);
+  color: rgba(233, 227, 209, 0.7);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.um__sound:hover { color: #e9e3d1; border-color: rgba(233, 227, 209, 0.5); }
+.um__sound:focus-visible {
+  outline: 2px solid rgba(226, 86, 94, 0.7);
+  outline-offset: 2px;
+}
+.um__sound-off { display: none; }
+.um__sound[aria-pressed="false"] .um__sound-on  { display: none; }
+.um__sound[aria-pressed="false"] .um__sound-off { display: inline; }
+
+@media (prefers-reduced-motion: reduce) {
+  .um-lamp, .um-fog__a, .um-fog__b, .um-fog__c { animation: none; }
 }

@@ -50,6 +50,10 @@
               <stop offset="0%" stop-color="#0e2027"/>
               <stop offset="100%" stop-color="#050c0f"/>
             </linearGradient>
+            <clipPath id="lakeClip"><rect x="0" y="350" width="1200" height="350"/></clipPath>
+            <filter id="blurSoft" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="14"/>
+            </filter>
             <filter id="blur8" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="10"/>
             </filter>
@@ -57,6 +61,11 @@
               <stop offset="0%" stop-color="#e9e3d1" stop-opacity="0.16"/>
               <stop offset="100%" stop-color="#e9e3d1" stop-opacity="0"/>
             </linearGradient>
+            <radialGradient id="moonPath" cx="50%" cy="18%" r="72%">
+              <stop offset="0%"   stop-color="#e9e3d1" stop-opacity="0.30"/>
+              <stop offset="45%"  stop-color="#e9e3d1" stop-opacity="0.10"/>
+              <stop offset="100%" stop-color="#e9e3d1" stop-opacity="0"/>
+            </radialGradient>
           </defs>
 
           <!-- sky -->
@@ -74,12 +83,13 @@
 
           <!-- water -->
           <rect y="350" width="1200" height="350" fill="url(#water)"/>
-          <g class="um-reflect">
-            <ellipse cx="880" cy="470" rx="46" ry="150" fill="url(#glow)" filter="url(#blur8)" opacity="0.9"/>
-            <g stroke="#e9e3d1" stroke-linecap="round" opacity="0.16">
-              <path d="M846 396 h68" stroke-width="2"/>
-              <path d="M856 424 h48" stroke-width="1.6"/>
-              <path d="M840 452 h76" stroke-width="1.6"/>
+          <g class="um-reflect" clip-path="url(#lakeClip)">
+            <ellipse cx="880" cy="470" rx="66" ry="140" fill="url(#moonPath)"/>
+            <g stroke="#e9e3d1" stroke-linecap="round" opacity="0.13">
+              <path d="M846 400 h68" stroke-width="2"/>
+              <path d="M858 430 h44" stroke-width="1.4"/>
+              <path d="M838 462 h84" stroke-width="1.4"/>
+              <path d="M852 496 h56" stroke-width="1.2"/>
             </g>
           </g>
           <rect y="350" width="1200" height="2" fill="#1b3d46" opacity="0.8"/>
@@ -104,6 +114,14 @@
               <line x1="44" y1="-2" x2="112" y2="38" stroke="#43301f" stroke-width="4" stroke-linecap="round"/>
             </g>
 
+            <!-- lantern on the bow -->
+            <g class="um-lamp">
+              <circle cx="56" cy="-2" r="18" fill="#ffb765" opacity="0.13"/>
+              <circle cx="56" cy="-2" r="9" fill="#ffc98a" opacity="0.22"/>
+              <circle cx="56" cy="-2" r="3.1" fill="#ffe6c0"/>
+              <path d="M56 -6 v-5" stroke="#2a1d15" stroke-width="2" stroke-linecap="round"/>
+            </g>
+
             <!-- hull: one crescent -->
             <path d="M-72 0 C -50 26 -24 32 0 32 C 24 32 50 26 72 0 Z" fill="#2a1c12"/>
             <path d="M-72 0 C -50 26 -24 32 0 32 C 24 32 50 26 72 0" fill="none" stroke="#5c4029" stroke-width="2"/>
@@ -115,10 +133,36 @@
             <path d="M-16 -58 H 20" stroke="#0f1216" stroke-width="4" stroke-linecap="round"/>
             <path d="M-10 -58 C -10 -66 14 -66 14 -58 Z" fill="#0f1216"/>
           </g>
+
+          <!-- something under the water (moves with JS) -->
+          <g id="umUnder" opacity="0" filter="url(#blur8)">
+            <ellipse cx="0" cy="0" rx="92" ry="17" fill="#03161a"/>
+            <ellipse cx="-18" cy="2" rx="52" ry="9" fill="#020f12" opacity="0.7"/>
+          </g>
+
+          <!-- fog drifting across the lake -->
+          <g class="um-fog" aria-hidden="true" filter="url(#blurSoft)">
+            <ellipse class="um-fog__a" cx="240" cy="470" rx="420" ry="46" fill="#9fc3c6" opacity="0.035"/>
+            <ellipse class="um-fog__b" cx="900" cy="530" rx="520" ry="54" fill="#9fc3c6" opacity="0.03"/>
+            <ellipse class="um-fog__c" cx="560" cy="610" rx="480" ry="60" fill="#9fc3c6" opacity="0.028"/>
+          </g>
         </svg>
 
         <p class="um__caption" id="umCaption"><span>Click the water</span> to row</p>
         <p class="um__meter"><span id="umDist">0</span> m</p>
+
+        <button type="button" class="um__sound" id="umSound" aria-pressed="true" aria-label="Mute the lake">
+          <svg class="um__sound-on" viewBox="0 0 24 24" width="17" height="17" fill="none"
+               stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9v6h3.2L13 19V5L7.2 9H4Z"/>
+            <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>
+          </svg>
+          <svg class="um__sound-off" viewBox="0 0 24 24" width="17" height="17" fill="none"
+               stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9v6h3.2L13 19V5L7.2 9H4Z"/>
+            <path d="m16 9 5 6m0-6-5 6"/>
+          </svg>
+        </button>
         <p class="um__sr" id="umStatus" role="status" aria-live="polite"></p>
       </div>
     </section>

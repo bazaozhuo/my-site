@@ -33,6 +33,9 @@
   var t = 0;                         /* time, for the bob */
   var moved = false;
   var raf = null;
+  var facing = 1;
+  var lampEl = document.querySelector('.um-lamp');
+  var lastSplash = 0;
 
   function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
@@ -93,6 +96,105 @@
     nextFrame(grow);
   }
 
+
+  /* ---------- sound: oar splashes and a low lake drone ----------
+     Synthesised on the fly with Web Audio, so there are no audio files
+     to load and nothing to go missing. The context is created on the
+     first gesture because browsers block audio before one. */
+  var audio = null, master = null, muted = false;
+  try { muted = localStorage.getItem('um-sound') === 'off'; } catch (e) {}
+
+  function initAudio() {
+    if (audio) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    audio = new AC();
+    master = audio.createGain();
+    master.gain.value = muted ? 0 : 1;
+    master.connect(audio.destination);
+
+    /* drone: two detuned sines, barely there */
+    [55, 82.5].forEach(function (freq, i) {
+      var o = audio.createOscillator();
+      var g = audio.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.value = i ? 0.012 : 0.018;
+      o.connect(g); g.connect(master); o.start();
+    });
+  }
+
+  function splash(strength) {
+    if (!audio || muted) return;
+    var len = 0.35, rate = audio.sampleRate;
+    var buf = audio.createBuffer(1, Math.floor(rate * len), rate);
+    var data = buf.getChannelData(0);
+    for (var i = 0; i < data.length; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2.4);
+    }
+    var src = audio.createBufferSource();
+    src.buffer = buf;
+
+    var band = audio.createBiquadFilter();
+    band.type = 'bandpass';
+    band.frequency.value = 780 + Math.random() * 420;
+    band.Q.value = 0.9;
+
+    var g = audio.createGain();
+    g.gain.value = 0.09 * (strength || 1);
+    g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + len);
+
+    src.connect(band); band.connect(g); g.connect(master);
+    src.start();
+  }
+
+  var soundBtn = document.getElementById('umSound');
+  if (soundBtn) {
+    soundBtn.setAttribute('aria-pressed', String(!muted));
+    soundBtn.setAttribute('aria-label', muted ? 'Unmute the lake' : 'Mute the lake');
+    soundBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      initAudio();
+      muted = !muted;
+      if (master) master.gain.value = muted ? 0 : 1;
+      soundBtn.setAttribute('aria-pressed', String(!muted));
+      soundBtn.setAttribute('aria-label', muted ? 'Unmute the lake' : 'Mute the lake');
+      try { localStorage.setItem('um-sound', muted ? 'off' : 'on'); } catch (err) {}
+    });
+  }
+
+  /* ---------- something under the water ---------- */
+  var underEl = document.getElementById('umUnder');
+  var underAt = performance.now() + 14000;   /* first shadow only after a while */
+  var underBusy = false;
+
+  function underPass() {
+    if (!underEl || reduce || underBusy) return;
+    underBusy = true;
+    var dir = Math.random() < 0.5 ? 1 : -1;
+    var y = 545 + Math.random() * 55;
+    var from = dir > 0 ? -220 : 1420;
+    var to = dir > 0 ? 1420 : -220;
+    var dur = 7000 + Math.random() * 4000;
+    var t0 = performance.now();
+
+    underEl.setAttribute('opacity', '0');
+
+    function step(now) {
+      var k = (now - t0) / dur;
+      if (k >= 1) { underEl.setAttribute('opacity', '0'); underBusy = false;
+                    underAt = now + 16000 + Math.random() * 26000; return; }
+      var cx = from + (to - from) * k;
+      var cy = y + Math.sin(k * Math.PI * 3) * 6;
+      underEl.setAttribute('transform', 'translate(' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ')');
+      /* fade in and out, never fully solid: it is under water */
+      var op = Math.sin(k * Math.PI) * 0.26;
+      underEl.setAttribute('opacity', op.toFixed(3));
+      nextFrame(step);
+    }
+    nextFrame(step);
+  }
+
   /* ---------- one frame ---------- */
   function frame(now) {
     t += 0.016;
@@ -109,7 +211,18 @@
     var tilt = reduce ? 0 : Math.sin(t * 1.7 + 1) * 0.8;
 
     boat.setAttribute('transform',
-      'translate(' + x.toFixed(2) + ' ' + (468 + bob).toFixed(2) + ') rotate(' + tilt.toFixed(2) + ')');
+      'translate(' + x.toFixed(2) + ' ' + (468 + bob).toFixed(2) + ') rotate(' + tilt.toFixed(2) + ')' +
+      ' scale(' + facing + ' 1)');
+
+    /* face the direction of travel */
+    if (dx < -0.4) facing = -1;
+    else if (dx > 0.4) facing = 1;
+
+    /* lantern flicker: two sines beating against each other */
+    if (lampEl && !reduce) {
+      var fl = 0.86 + Math.sin(t * 7.3) * 0.06 + Math.sin(t * 2.1) * 0.05;
+      lampEl.setAttribute('opacity', fl.toFixed(3));
+    }
 
     /* oars swing when rowing, rest when not */
     var swing = rowing ? Math.sin(t * 6) * 16 : 0;
@@ -125,8 +238,14 @@
       if (treesNear) treesNear.setAttribute('transform', 'translate(' + (-shift).toFixed(2) + ' 0)');
     }
 
-    /* wake */
-    if (rowing && Math.random() < 0.18) ripple(x - Math.sign(dx) * 60, 468 + 24, 0.7);
+    /* wake + oar sound */
+    if (rowing) {
+      if (Math.random() < 0.18) ripple(x - Math.sign(dx) * 60, 468 + 24, 0.7);
+      if (t - lastSplash > 0.42) { splash(0.8); lastSplash = t; }
+    }
+
+    /* an occasional shadow passing under the boat */
+    if (!reduce && performance.now() > underAt) underPass();
 
     if (distEl) distEl.textContent = String(Math.round((x - MIN_X) / 9));
 
@@ -158,6 +277,7 @@
   }
 
   stage.addEventListener('click', function (e) {
+    initAudio();
     var sx = sceneX(e.clientX);
     goTo(sx, 'Rowing to ' + Math.round(clamp((sx - MIN_X) / 9, 0, 100)) + ' metres from shore.');
     ripple(sx, 470, 1.2);
@@ -176,7 +296,8 @@
 
   /* 调试用：无头浏览器里量一下内部状态 */
   window.__umDebug = function () {
-    return { x: x, target: target, raf: raf !== null, moved: moved, min: MIN_X, max: MAX_X };
+    return { x: x, target: target, raf: raf !== null, moved: moved, min: MIN_X, max: MAX_X,
+             facing: facing, muted: muted, audio: !!audio, under: !!(underEl && underEl.getAttribute('opacity') !== '0') };
   };
 
   window.addEventListener('resize', function () { fitToViewport(); });
