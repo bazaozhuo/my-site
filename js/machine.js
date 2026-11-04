@@ -65,6 +65,7 @@
     if (x < MIN_X || x > MAX_X) {
       x = target = clamp((MIN_X + MAX_X) / 2, MIN_X, MAX_X);
     }
+    homeX = clamp((MIN_X + MAX_X) / 2, MIN_X, MAX_X);
   }
 
   /* ---------- ripples ---------- */
@@ -195,6 +196,78 @@
     nextFrame(step);
   }
 
+
+  /* ---------- the useless machine: a switch that undoes itself ----------
+     This is the whole joke of the piece. You flick it on; a small arm
+     reaches over and turns it back off. Nothing is achieved. */
+  var sw = document.getElementById('umSwitch');
+  var lever = document.getElementById('umLever');
+  var arm = document.getElementById('umArm');
+  var bulb = document.getElementById('umSwitchBulb');
+  var tallyEl = document.getElementById('umTally');
+  var noteEl = document.getElementById('umNote');
+  var tally = 0;
+  var switching = false;
+
+  function toggleSwitch() {
+    if (!sw || switching) return;
+    switching = true;
+    tally++;
+    if (tallyEl) tallyEl.textContent = String(tally);
+    if (statusEl) statusEl.textContent = 'Switch on. Something turns it off.';
+    splash(0.6);
+
+    /* click: lever up, bulb warms */
+    if (lever) lever.setAttribute('transform', 'rotate(-24 -42.5 -30)');
+    if (bulb) bulb.setAttribute('fill', '#ffcf8a');
+
+    /* 900ms later: the arm comes in and pushes it back */
+    setTimeout(function () {
+      if (arm) arm.setAttribute('opacity', '1');
+      if (lever) lever.setAttribute('transform', 'rotate(0 -42.5 -30)');
+      if (bulb) bulb.setAttribute('fill', '#4a3423');
+      splash(0.35);
+      setTimeout(function () {
+        if (arm) arm.setAttribute('opacity', '0');
+        switching = false;
+      }, 700);
+    }, 900);
+  }
+
+  if (sw) {
+    sw.addEventListener('click', function (e) { e.stopPropagation(); toggleSwitch(); });
+    sw.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); toggleSwitch(); }
+    });
+  }
+
+  /* ---------- the lake takes it back ----------
+     Stop rowing and the boat drifts home; reach the far edge and there is
+     nothing there. Both are announced once, quietly. */
+  var homeX = 430;
+  var lastAction = performance.now();
+  var drifting = false;
+
+  function say(text) {
+    if (!noteEl) return;
+    noteEl.textContent = text;
+    noteEl.classList.add('is-on');
+    setTimeout(function () { noteEl.classList.remove('is-on'); }, 3200);
+  }
+
+  function checkIdle(now) {
+    if (drifting || Math.abs(x - target) > 3) return;
+    if (now - lastAction < 9000) return;
+
+    var atEdge = target >= MAX_X - 2;
+    if (atEdge) say('You have arrived. There is nothing here.');
+    else say('The lake takes it back.');
+
+    drifting = true;
+    target = clamp(homeX, MIN_X, MAX_X);
+    setTimeout(function () { drifting = false; lastAction = performance.now(); }, 6000);
+  }
+
   /* ---------- one frame ---------- */
   function frame(now) {
     t += 0.016;
@@ -244,6 +317,9 @@
       if (t - lastSplash > 0.42) { splash(0.8); lastSplash = t; }
     }
 
+    /* idle: does anything happen? no. that is the point */
+    checkIdle(now);
+
     /* an occasional shadow passing under the boat */
     if (!reduce && performance.now() > underAt) underPass();
 
@@ -256,6 +332,7 @@
 
   /* ---------- move the boat ---------- */
   function goTo(nextX, announce) {
+    lastAction = performance.now();
     target = clamp(nextX, MIN_X, MAX_X);
     if (!moved) {
       moved = true;
@@ -297,7 +374,9 @@
   /* 调试用：无头浏览器里量一下内部状态 */
   window.__umDebug = function () {
     return { x: x, target: target, raf: raf !== null, moved: moved, min: MIN_X, max: MAX_X,
-             facing: facing, muted: muted, audio: !!audio, under: !!(underEl && underEl.getAttribute('opacity') !== '0') };
+             facing: facing, muted: muted, audio: !!audio,
+             under: !!(underEl && underEl.getAttribute('opacity') !== '0'),
+             tally: tally, drifting: drifting };
   };
 
   window.addEventListener('resize', function () { fitToViewport(); });
